@@ -1,7 +1,12 @@
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "core"))
 import customtkinter as ctk
 from datetime import datetime
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from analyzer import gastos
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 app = ctk.CTk()
 app.title("FinTracker")
@@ -63,4 +68,17 @@ ctk.CTkLabel(card4, text="$0.00", font=("Arial", 24, "bold")).pack()
 frame_grafica = ctk.CTkFrame(app)
 frame_grafica.pack(fill="both", expand=True, padx=10, pady=5)
 
+
+fig, ax = plt.subplots(figsize=(10, 4))
+gastos.abs().plot(kind="bar", ax=ax)
+ax.set_title("Gastos por categoria")
+
+fig.patch.set_facecolor("#2b2b2b")
+ax.set_facecolor("#2b2b2b")
+ax.tick_params(colors="white")
+ax.title.set_color("white")
+
+canvas = FigureCanvasTkAgg(fig, master=frame_grafica)
+canvas.draw()
+canvas.get_tk_widget().pack(fill="both", expand=True)
 app.mainloop()

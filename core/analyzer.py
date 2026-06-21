@@ -65,6 +65,7 @@ gastos = df_sum[df_sum < 0]
 
 
 # DEBUG
+"""
 print("Filtrado de dia")
 print(filtrar_por_dia(df_total, "2026-05-11"))
 
@@ -84,3 +85,4 @@ ax2.set_title("GASTOS")
 
 plt.tight_layout()
 plt.show()
+"""
