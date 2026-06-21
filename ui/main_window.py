@@ -1,11 +1,15 @@
 import os
 import sys
+from tkinter import Entry
+
+from matplotlib import text
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "core"))
 import customtkinter as ctk
-from datetime import datetime
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from datetime import datetime
+from tkcalendar import DateEntry
 from analyzer import (
     gastos,
     df_total,
@@ -74,6 +78,18 @@ ctk.CTkLabel(card3, text=df_categoria, font=("Arial", 24, "bold")).pack()
 ctk.CTkLabel(card4, text="Promedio por categoria", font=("arial", 12)).pack(pady=5)
 ctk.CTkLabel(card4, text=f"${df_promedio:.2f}", font=("Arial", 24, "bold")).pack()
 
+# Calendario
+frame_filtros = ctk.CTkFrame(app)
+frame_filtros.pack(fill="x", padx=10, pady=5)
+
+entry_fecha = DateEntry(frame_filtros, date_pattern="yyyy-mm-dd")
+entry_fecha.pack(side="left", padx=10)
+
+# Boton para filtrar
+btn_filtrar = ctk.CTkButton(frame_filtros, text="Filtrar")
+btn_filtrar.pack(side="left", padx=10)
+
+# Grafica de barras
 frame_grafica = ctk.CTkFrame(app)
 frame_grafica.pack(fill="both", expand=True, padx=10, pady=5)
 
@@ -90,4 +106,5 @@ ax.title.set_color("white")
 canvas = FigureCanvasTkAgg(fig, master=frame_grafica)
 canvas.draw()
 canvas.get_tk_widget().pack(fill="both", expand=True)
+
 app.mainloop()
