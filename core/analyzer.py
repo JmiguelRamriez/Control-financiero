@@ -60,8 +60,24 @@ def filtrar_por_dia(df, dia_exacto):
 
 
 df_total["categoria"] = df_total["descripcion"].apply(categorizar_desc)
+
+# Suma de todas las categorias
 df_sum = df_total.groupby("categoria")["monto"].sum()
+
+# Solo gastos
 gastos = df_sum[df_sum < 0]
+
+# Suma de los todos los gastos
+df_suma_gastos = abs(gastos.sum())
+
+# Total de trasacciones
+transacciones = len(df_total)
+
+# Encontrar la categoria que mas se gasto
+df_categoria = gastos.idxmin()
+
+# Promedio de los gastos
+df_promedio = abs(gastos.mean())
 
 
 # DEBUG

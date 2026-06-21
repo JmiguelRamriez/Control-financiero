@@ -4,9 +4,18 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "core"))
 import customtkinter as ctk
 from datetime import datetime
-from analyzer import gastos
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from analyzer import (
+    gastos,
+    df_total,
+    df_sum,
+    df_suma_gastos,
+    df_categoria,
+    df_promedio,
+    transacciones,
+)
+
 
 app = ctk.CTk()
 app.title("FinTracker")
@@ -54,16 +63,16 @@ card4.grid(row=0, column=3, padx=50, pady=10, sticky="nsew")
 
 # Poner las cartas en el grid
 ctk.CTkLabel(card1, text="TOTAL GASTADO", font=("arial", 12)).pack(pady=5)
-ctk.CTkLabel(card1, text="$0.00", font=("Arial", 24, "bold")).pack()
+ctk.CTkLabel(card1, text=df_suma_gastos, font=("Arial", 24, "bold")).pack()
 
-ctk.CTkLabel(card2, text="Transacciones", font=("arial", 12)).pack(pady=5)
-ctk.CTkLabel(card2, text="$0.00", font=("Arial", 24, "bold")).pack()
+ctk.CTkLabel(card2, text="Numero de transacciones", font=("arial", 12)).pack(pady=5)
+ctk.CTkLabel(card2, text=transacciones, font=("Arial", 24, "bold")).pack()
 
 ctk.CTkLabel(card3, text="Mayor categoria", font=("arial", 12)).pack(pady=5)
-ctk.CTkLabel(card3, text="$0.00", font=("Arial", 24, "bold")).pack()
+ctk.CTkLabel(card3, text=df_categoria, font=("Arial", 24, "bold")).pack()
 
-ctk.CTkLabel(card4, text="Promdio", font=("arial", 12)).pack(pady=5)
-ctk.CTkLabel(card4, text="$0.00", font=("Arial", 24, "bold")).pack()
+ctk.CTkLabel(card4, text="Promedio por categoria", font=("arial", 12)).pack(pady=5)
+ctk.CTkLabel(card4, text=f"${df_promedio:.2f}", font=("Arial", 24, "bold")).pack()
 
 frame_grafica = ctk.CTkFrame(app)
 frame_grafica.pack(fill="both", expand=True, padx=10, pady=5)
