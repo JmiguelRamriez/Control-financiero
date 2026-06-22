@@ -54,51 +54,32 @@ def filtrar_mes(df, year_mes):
     return df[df["fecha"].str[:7] == year_mes]
 
 
-# Filtrado de año
+# Filtrado de dia
 def filtrar_por_dia(df, dia_exacto):
     return df[df["fecha"] == dia_exacto]
 
 
-df_total["categoria"] = df_total["descripcion"].apply(categorizar_desc)
-
-# Suma de todas las categorias
-df_sum = df_total.groupby("categoria")["monto"].sum()
-
-# Solo gastos
-gastos = df_sum[df_sum < 0]
-
-# Suma de los todos los gastos
-df_suma_gastos = abs(gastos.sum())
-
-# Total de trasacciones
-transacciones = len(df_total)
-
-# Encontrar la categoria que mas se gasto
-df_categoria = gastos.idxmin()
-
-# Promedio de los gastos
-df_promedio = abs(gastos.mean())
+def cargar_categorizar_datos():
+    df = df_total.copy()
+    df["categoria"] = df["descripcion"].apply(categorizar_desc)
+    return df
 
 
-# DEBUG
-"""
-print("Filtrado de dia")
-print(filtrar_por_dia(df_total, "2026-05-11"))
+def calcular_resumen(df):
+    solo_gastos = df[df["monto"] < 0]
+    solo_gastos = solo_gastos[solo_gastos["categoria"] != "Abono"]
+    suma_categorias = solo_gastos.groupby("categoria")["monto"].sum()
 
-print("filtrado de mes")
-print(filtrar_mes(df_total, "2026-05"))
+    return {
+        "total_gastado": abs(solo_gastos["monto"].sum()),
+        "transacciones": len(df),
+        "mayor_categoria": suma_categorias.idxmin(),
+        "promedio": abs(suma_categorias.mean()),
+        "gastos": solo_gastos,
+        "suma_categorias": suma_categorias,
+    }
 
-fig1, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
-gastos.abs().plot(kind="bar", ax=ax1)
 
-ax1.set_title("GASTOS")
-ax1.set_xlabel("CATEGORIAS")
-ax1.set_ylabel("GASTO")
-
-# Gráfica de pie
-gastos.abs().plot(kind="pie", ax=ax2, autopct="%1.1f%%")
-ax2.set_title("GASTOS")
-
-plt.tight_layout()
-plt.show()
-"""
+if __name__ == "__main__":
+    df = cargar_categorizar_datos()
+    resumen = calcular_resumen(df)
