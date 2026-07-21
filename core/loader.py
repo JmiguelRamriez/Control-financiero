@@ -1,8 +1,8 @@
-from io import text_encoding
 import pandas as pd
-import numpy as np
 import re
 import pdfplumber
+import os
+import glob
 
 
 meses = {
@@ -125,9 +125,36 @@ def leer_plata(ruta_pdf):
     return pd.DataFrame(filas)
 
 
-ln = leer_nu("/home/josemr21/Proyectos/Python/finances/data/junio 2026.pdf")
-lp = leer_plata(
-    "/home/josemr21/Proyectos/Python/finances/data/Estado de cuenta 12 may – 9 jun.pdf"
-)
+DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
 
-df_total = pd.concat([ln, lp], ignore_index=True)
+
+def detectar_formato(ruta_pdf):
+    with pdfplumber.open(ruta_pdf) as pdf:
+        texto = pdf.pages[0].extract_text() if pdf.pages else ""
+    if not texto:
+        return None
+    if re.search(r"\d{2}\s+[A-Z]{3}\s+\d{4}", texto):
+        return "nu"
+    if re.search(r"\d{2}-[a-z]{3}-\d{4}", texto):
+        return "plata"
+    return None
+
+
+def cargar_todos_pdfs():
+    dfs = []
+    for pdf in glob.glob(os.path.join(DATA_DIR, "*.pdf")):
+        fmt = detectar_formato(pdf)
+        if fmt == "nu":
+            df = leer_nu(pdf)
+        elif fmt == "plata":
+            df = leer_plata(pdf)
+        else:
+            continue
+        if not df.empty:
+            dfs.append(df)
+    if not dfs:
+        return pd.DataFrame()
+    return pd.concat(dfs, ignore_index=True)
+
+
+df_total = cargar_todos_pdfs()

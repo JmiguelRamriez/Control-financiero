@@ -28,9 +28,10 @@ def actualizar_historial(ruta, nombre_banco, ruta_historial):
     return resultado
 
 
-df = actualizar_historial(
-    "/home/josemr21/Proyectos/Python/finances/data/Estado de cuenta 12 may – 9 jun.pdf",
-    "plata",
-    "/home/josemr21/Proyectos/Python/finances/data/historial.csv",
-)
-print(df)
+if __name__ == "__main__":
+    df = actualizar_historial(
+        "/home/josemr21/Proyectos/Python/finances/data/Estado de cuenta 12 may – 9 jun.pdf",
+        "plata",
+        "/home/josemr21/Proyectos/Python/finances/data/historial.csv",
+    )
+    print(df)
