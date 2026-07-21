@@ -9,7 +9,7 @@ from analyzer import (
     filtrar_por_dia,
 )
 
-API_KEY = os.getenv("NVIDIA_API_KEY", "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")
+API_KEY = os.getenv("NVIDIA_API_KEY", "")
 
 client = OpenAI(
     base_url="https://integrate.api.nvidia.com/v1",
